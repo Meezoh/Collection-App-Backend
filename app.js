@@ -9,8 +9,6 @@ import kollections from './routes/kollectionsRoute';
 import items from './routes/itemsRoute';
 import notFound from './middlewares/not-found';
 import verifyAdmin from './middlewares/verifyAdmin';
-import cors from 'cors';
-import { urlencoded } from 'express';
 
 // express app
 const app = express();
@@ -25,7 +23,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/api/login', login);
 app.use('/api/signup', signup);
 app.use('/api/users', users);
-app.use('/api/kollections', kollections);
+app.use('/api/collections', kollections);
 app.use('/api/items', items);
 app.use(notFound);
 
@@ -40,13 +38,3 @@ const start = async () => {
   }
 };
 start();
-
-// app.get('/kollections', async (req, res) => {
-//   const kollection = new Kollection({
-//     name: 'BMW',
-//     description: 'car',
-//     topic: 'sporty',
-//   });
-//   const response = await kollection.save();
-//   res.send(response);
-// });

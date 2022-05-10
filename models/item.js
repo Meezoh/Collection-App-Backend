@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const itemSchema = new Schema(
   {
@@ -11,54 +11,57 @@ const itemSchema = new Schema(
       type: String,
       required: [true, 'must provide a tag'],
     },
-    Optional1a: {
+    optional1a: {
       type: Number,
     },
-    Optional1b: {
+    optional1b: {
       type: Number,
     },
-    Optional1c: {
+    optional1c: {
       type: Number,
     },
-    Optional2a: {
+    optional2a: {
       type: String,
     },
-    Optional2b: {
+    optional2b: {
       type: String,
     },
-    Optional2c: {
+    optional2c: {
       type: String,
     },
-    Optional3a: {
+    optional3a: {
       type: String,
     },
-    Optional3b: {
+    optional3b: {
       type: String,
     },
-    Optional3c: {
+    optional3c: {
       type: String,
     },
-    Optional4a: {
+    optional4a: {
       type: Boolean,
     },
-    Optional4b: {
+    optional4b: {
       type: Boolean,
     },
-    Optional4c: {
+    optional4c: {
       type: Boolean,
     },
-    Optional5a: {
+    optional5a: {
       type: Date,
     },
-    Optional5b: {
+    optional5b: {
       type: Date,
     },
-    Optional5c: {
+    optional5c: {
       type: Date,
+    },
+    kollectionId: {
+      type: String,
     },
   },
   { timestamps: true }
 );
 
-const Item = mongoose.model('Collection', itemSchema);
+const Item = mongoose.model('Item', itemSchema);
 export default Item;

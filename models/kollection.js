@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import Item from './item';
 const { Schema } = mongoose;
 
 const kollectionSchema = new Schema(
@@ -20,16 +19,12 @@ const kollectionSchema = new Schema(
       data: Buffer,
       type: String,
     },
-    items: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: Item,
-      },
-    ],
+    userId: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
 
 const Kollection = mongoose.model('Kollection', kollectionSchema);
 export default Kollection;
-//  =  mongoose.model.Collection || mongoose.model('Collection', collectionSchema);

@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import 'mongoose-type-email';
-import Kollection from './kollection';
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
@@ -33,12 +32,6 @@ const userSchema = new Schema(
     token: {
       type: String,
     },
-    collections: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: Kollection,
-      },
-    ],
   },
   { timestamps: true }
 );
