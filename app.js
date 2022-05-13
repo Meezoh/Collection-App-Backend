@@ -24,6 +24,8 @@ app.use('/api/login', login);
 app.use('/api/signup', signup);
 app.use('/api/users', users);
 app.use('/api/collections', kollections);
+
+// TODO: searchItem route
 app.use('/api/items', items);
 app.use(notFound);
 

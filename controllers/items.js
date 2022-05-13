@@ -92,9 +92,13 @@ const deleteItem = async (req, res) => {
   }
 };
 
+// TODO: searchItems is a search index that I created on mongoDB. I need to use this search index to search the database for an item.
+
+// The code below is giving me an error. quering with Item.find() gives me all items and not the searched item
+
 const searchItem = async (req, res) => {
   try {
-    const { searchInput } = req.query;
+    const { searchInput } = req.body;
     const search = await Item.aggregate([
       {
         $search: {
