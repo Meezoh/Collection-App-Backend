@@ -25,4 +25,14 @@ const updateUser = async (req, res) => {
   }
 };
 
-export default allUsers;
+const deleteUsers = async (req, res) => {
+  try {
+    const deletedUsers = await User.deleteMany({ selected: true });
+    if (!deletedUsers) res.status(404).json({ msg: 'No user found' });
+    res.status(200).json({ msg: 'Users deleted successfully', user: null });
+  } catch (error) {
+    res.status(500).json({ msg: error });
+  }
+};
+
+export { allUsers, updateUser, deleteUsers };

@@ -17,10 +17,12 @@
     "express": "^4.18.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
+    "mongodb": "^4.6.0",
     "mongoose": "^6.3.2",
     "mongoose-type-email": "^1.1.2",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.16"
+    "nodemon": "^2.0.16",
+    "realm": "^10.17.0"
   },
   "type": "module",
   "devDependencies": {
