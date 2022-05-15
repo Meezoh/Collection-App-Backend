@@ -1,4 +1,4 @@
-import Kollection from '../models/kollection';
+import Kollection from '../models/kollection.js';
 
 const allKollections = async (req, res) => {
   try {

@@ -1,18 +1,19 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import connectDB from './db/connect';
+import connectDB from './db/connect.js';
 import morgan from 'morgan';
-import login from './controllers/login';
-import signup from './controllers/signup';
-import users from './routes/usersRoutes';
-import kollections from './routes/kollectionsRoute';
-import items from './routes/items';
-import allItems from './routes/allItems';
-import notFound from './middlewares/not-found';
-import verifyAdmin from './middlewares/verifyAdmin';
-import verifyToken from './middlewares/verifyToken';
+import login from './controllers/login.js';
+import signup from './controllers/signup.js';
+import users from './routes/users.js';
+import kollections from './routes/kollections.js';
+import items from './routes/items.js';
+import allItems from './routes/allItems.js';
+import notFound from './middlewares/not-found.js';
+import verifyAdmin from './middlewares/verifyAdmin.js';
+import verifyToken from './middlewares/verifyToken.js';
 import cors from 'cors';
 
+console.log('4ck offffff and piss yourself 0000000');
 // express app
 const app = express();
 dotenv.config();
