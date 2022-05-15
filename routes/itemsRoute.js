@@ -1,19 +1,19 @@
 import express from 'express';
 import {
-  allItems,
-  setItem,
+  createItem,
   kollectionItems,
   updateItem,
   deleteItem,
-  searchItem,
+  like,
+  comment,
 } from '../controllers/items';
 const router = express.Router();
 
-router.route('/').get(allItems).post(setItem).delete(deleteItem);
+router.route('/').delete(deleteItem);
+router.route('/create/:kollectionId').post(createItem);
 router.route('/kollection/:kollectionId').get(kollectionItems);
 router.route('/:id').patch(updateItem);
-
-// TODO: the searchItem route
-router.route('/search').post(searchItem);
+router.route('/:id/likes').put(like);
+router.route('/:id/comments').put(comment);
 
 export default router;

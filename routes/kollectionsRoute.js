@@ -1,18 +1,15 @@
 import express from 'express';
 import {
   allKollections,
-  setKollection,
+  createKollection,
   userKollections,
   updateKollection,
   deleteKollection,
 } from '../controllers/kollections';
 const router = express.Router();
 
-router
-  .route('/')
-  .get(allKollections)
-  .post(setKollection)
-  .delete(deleteKollection);
+router.route('/').get(allKollections).delete(deleteKollection);
+router.route('/create/:userId').post(createKollection);
 router.route('/user/:userId').get(userKollections);
 router.route('/:id').patch(updateKollection);
 export default router;

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
+const { ObjectId } = Schema.Types;
 
 const kollectionSchema = new Schema(
   {
@@ -19,8 +20,9 @@ const kollectionSchema = new Schema(
       data: Buffer,
       type: String,
     },
-    userId: {
-      type: String,
+    postedBy: {
+      type: ObjectId,
+      ref: 'User',
     },
   },
   { timestamps: true }

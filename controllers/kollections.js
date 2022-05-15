@@ -2,22 +2,29 @@ import Kollection from '../models/kollection';
 
 const allKollections = async (req, res) => {
   try {
-    const kollections = await Kollection.find({});
+    const kollections = await Kollection.find()
+      .populate('postedBy', '_id name')
+      .sort('createdAt');
+
     res.status(200).json({ kollections });
   } catch (error) {
     res.status(500).json({ msg: error });
   }
 };
 
-const setKollection = async (req, res) => {
+const createKollection = async (req, res) => {
   try {
-    const { name, description, topic, userId } = req.body;
-    const newKollection = await Kollection.create({
+    const { userId } = req.params;
+    const { name, description, topic } = req.body;
+
+    const kollection = new Kollection({
       name,
       description,
       topic,
-      userId,
+      postedBy: userId,
     });
+    const newKollection = await kollection.save();
+
     res.status(200).json({ newKollection });
   } catch (error) {
     res.status(500).json({ msg: error });
@@ -71,7 +78,7 @@ const deleteKollection = async (req, res) => {
 
 export {
   allKollections,
-  setKollection,
+  createKollection,
   userKollections,
   updateKollection,
   deleteKollection,

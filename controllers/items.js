@@ -2,54 +2,90 @@ import Item from '../models/item';
 
 const allItems = async (req, res) => {
   try {
-    const items = await Item.find({});
+    const items = await Item.find()
+      .populate('createdBy', '_id name')
+      .populate('inKollection', '_id')
+      .sort('-createdAt');
     res.status(200).json({ items });
   } catch (error) {
     res.status(500).json({ msg: error });
   }
 };
 
-const setItem = async (req, res) => {
+const allItemsByTag = async (req, res) => {
   try {
-    const {
+    const { tag } = req.params;
+    const items = await Item.find({ tag });
+    res.status(200).json({ items });
+  } catch (error) {
+    res.status(500).json({ msg: error });
+  }
+};
+
+const searchItem = async (req, res) => {
+  try {
+    const { input } = req.body;
+    const search = await Item.aggregate([
+      {
+        $search: {
+          index: 'nameIndex',
+          text: {
+            query: input,
+            path: ['name', 'comments.text'],
+            fuzzy: {},
+          },
+        },
+      },
+    ]);
+    res.status(200).json({ search });
+  } catch (error) {
+    res.status(500).json({ msg: error });
+  }
+};
+
+const autoCompleteTag = async (req, res) => {
+  try {
+    const { input } = req.body;
+    const autoComplete = await Item.aggregate([
+      {
+        $search: {
+          index: 'autoCompleteTags',
+          autocomplete: {
+            query: input,
+            path: 'tag',
+            tokenOrder: 'sequential',
+          },
+        },
+      },
+      {
+        $limit: 10,
+      },
+      {
+        $project: {
+          name: 1,
+          tag: 1,
+        },
+      },
+    ]);
+    res.status(200).json({ autoComplete });
+  } catch (error) {
+    res.status(500).json({ msg: error });
+  }
+};
+
+const createItem = async (req, res) => {
+  try {
+    const { kollectionId } = req.params;
+    const { name, tag } = req.body;
+    const item = new Item({
       name,
       tag,
-      optional1a,
-      optional1b,
-      optional1c,
-      optional2a,
-      optional2b,
-      optional2c,
-      optional3a,
-      optional3b,
-      optional3c,
-      optional4a,
-      optional4b,
-      optional4c,
-      optional5a,
-      optional5b,
-      optional5c,
-    } = req.body;
-    const newItem = await Item.create({
-      name,
-      tag,
-      optional1a,
-      optional1b,
-      optional1c,
-      optional2a,
-      optional2b,
-      optional2c,
-      optional3a,
-      optional3b,
-      optional3c,
-      optional4a,
-      optional4b,
-      optional4c,
-      optional5a,
-      optional5b,
-      optional5c,
-      kollectionId,
+      // TODO: test and see if the "createdBy" can be retrieved from req.user using the frontend
+      createdBy: req.user,
+      inKollection: kollectionId,
     });
+    const newItem = await item.save();
+
     res.status(200).json({ newItem });
   } catch (error) {
     res.status(500).json({ msg: error });
@@ -58,7 +94,7 @@ const setItem = async (req, res) => {
 
 const kollectionItems = async (req, res) => {
   try {
-    const { kollectionId } = req.params;
+    const { kollectionId } = req.body;
     const items = await Item.find({ kollectionId });
     res.status(200).json({ items });
   } catch (error) {
@@ -92,38 +128,60 @@ const deleteItem = async (req, res) => {
   }
 };
 
-// TODO: searchItems is a search index that I created on mongoDB. I need to use this search index to search the database for an item.
+const like = (req, res) => {
+  const { itemId } = req.body;
+  Item.findByIdAndUpdate(
+    itemId,
+    {
+      $push: { likes: req.user._id },
+    },
+    {
+      new: true,
+    }
+  ).exec((err, result) => {
+    if (err) {
+      return res.status(500).json({ error: err });
+    } else {
+      res.json(result);
+    }
+  });
+};
 
-// The code below is giving me an error. quering with Item.find() gives me all items and not the searched item
-
-const searchItem = async (req, res) => {
-  try {
-    const { searchInput } = req.body;
-    const search = await Item.aggregate([
-      {
-        $search: {
-          index: 'searchItems',
-          text: {
-            query: searchInput,
-            path: {
-              wildcard: '*',
-            },
-            fuzzy: {},
-          },
-        },
-      },
-    ]);
-    res.status(200).json({ search });
-  } catch (error) {
-    res.status(500).json({ msg: error });
-  }
+const comment = (req, res) => {
+  const { id: itemId } = req.body;
+  const comment = {
+    text: req.body.text,
+    createdBy: req.user._id,
+  };
+  Item.findByIdAndUpdate(
+    itemId,
+    {
+      $push: { comments: comment },
+    },
+    {
+      new: true,
+    }
+  )
+    .populate('comments.createdBy', '_id name')
+    .populate('createdBy', '_id name')
+    .exec((err, result) => {
+      if (err) {
+        return res.status(500).json({ error: err });
+      } else {
+        res.json(result);
+      }
+    });
 };
 
 export {
   allItems,
-  setItem,
+  searchItem,
+  allItemsByTag,
+  autoCompleteTag,
+  createItem,
   kollectionItems,
   updateItem,
   deleteItem,
-  searchItem,
+  like,
+  comment,
 };

@@ -1,16 +1,39 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
+const { ObjectId } = Schema.Types;
 
 const itemSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, 'must provide a name'],
     },
     tag: {
-      type: String,
-      required: [true, 'must provide a tag'],
+      type: Array,
     },
+    likes: [
+      {
+        type: ObjectId,
+        ref: 'User',
+      },
+    ],
+    comments: [
+      {
+        text: String,
+        postedBy: {
+          type: ObjectId,
+          ref: 'User',
+        },
+      },
+    ],
+    createdBy: {
+      type: ObjectId,
+      ref: 'User',
+    },
+    inKollection: {
+      type: ObjectId,
+      ref: 'Kollection',
+    },
+
     optional1a: {
       type: Number,
     },
@@ -55,9 +78,6 @@ const itemSchema = new Schema(
     },
     optional5c: {
       type: Date,
-    },
-    kollectionId: {
-      type: String,
     },
   },
   { timestamps: true }

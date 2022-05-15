@@ -32,6 +32,12 @@ const userSchema = new Schema(
     token: {
       type: String,
     },
+    // kollections: [
+    //   {
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'Kollection',
+    //   },
+    // ],
   },
   { timestamps: true }
 );
