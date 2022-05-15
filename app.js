@@ -11,12 +11,14 @@ import allTheItems from './routes/itemSearchRoute';
 import notFound from './middlewares/not-found';
 import verifyAdmin from './middlewares/verifyAdmin';
 import verifyToken from './middlewares/verifyToken';
+import cors from 'cors';
 
 // express app
 const app = express();
 dotenv.config();
 
 // middleware
+app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
