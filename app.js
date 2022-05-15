@@ -6,8 +6,8 @@ import login from './controllers/login';
 import signup from './controllers/signup';
 import users from './routes/usersRoutes';
 import kollections from './routes/kollectionsRoute';
-import items from './routes/itemsRoute';
-import allTheItems from './routes/itemSearchRoute';
+import items from './routes/items';
+import allItems from './routes/allItems';
 import notFound from './middlewares/not-found';
 import verifyAdmin from './middlewares/verifyAdmin';
 import verifyToken from './middlewares/verifyToken';
@@ -29,11 +29,11 @@ app.use('/api/signup', signup);
 app.use('/api/users', verifyToken, verifyAdmin, users);
 app.use('/api/collections', kollections);
 app.use('/api/items', verifyToken, items);
-app.use('/api/allitems', allTheItems);
+app.use('/api/allitems', allItems);
 app.use(notFound);
 
 // connect to mongodb and listen for requests
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3010;
 const start = async () => {
   try {
     await connectDB(process.env.DBURI);
