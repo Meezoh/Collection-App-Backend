@@ -6,9 +6,9 @@ const allKollections = async (req, res) => {
       .populate('postedBy', '_id name')
       .sort('createdAt');
 
-    res.status(200).json({ kollections });
+    return res.status(200).json({ kollections });
   } catch (error) {
-    res.status(500).json({ msg: error });
+    return res.status(500).json({ msg: error });
   }
 };
 
@@ -25,9 +25,9 @@ const createKollection = async (req, res) => {
     });
     const newKollection = await kollection.save();
 
-    res.status(200).json({ newKollection });
+    return res.status(200).json({ newKollection });
   } catch (error) {
-    res.status(500).json({ msg: error });
+    return res.status(500).json({ msg: error });
   }
 };
 
@@ -35,9 +35,9 @@ const userKollections = async (req, res) => {
   try {
     const { userId } = req.params;
     const kollections = await Kollection.find({ userId });
-    res.status(200).json({ kollections });
+    return res.status(200).json({ kollections });
   } catch (error) {
-    res.status(500).json({ msg: error });
+    return res.status(500).json({ msg: error });
   }
 };
 
@@ -55,7 +55,7 @@ const updateKollection = async (req, res) => {
     if (!updatedKollection) {
       return res.status(404).json({ msg: `No user with the id: ${id}` });
     }
-    res
+    return res
       .status(200)
       .json({ msg: 'User updated successfully', updatedKollection });
   } catch (error) {
@@ -66,13 +66,15 @@ const updateKollection = async (req, res) => {
 const deleteKollection = async (req, res) => {
   try {
     const deletedKollection = await Kollection.deleteMany({ selected: true });
-    if (!deletedKollection)
-      res.status(404).json({ msg: 'No kollection found' });
-    res
-      .status(200)
-      .json({ msg: 'Kollections deleted successfully', newKollection: null });
+    if (!deletedKollection) {
+      return res.status(404).json({ msg: 'No kollection found' });
+    } else {
+      return res
+        .status(200)
+        .json({ msg: 'Kollections deleted successfully', newKollection: null });
+    }
   } catch (error) {
-    res.status(500).json({ msg: error });
+    return res.status(500).json({ msg: error });
   }
 };
 

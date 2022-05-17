@@ -3,9 +3,9 @@ import User from '../models/user.js';
 const allUsers = async (req, res) => {
   try {
     const users = await User.find({});
-    res.status(200).json({ users });
+    return res.status(200).json({ users });
   } catch (error) {
-    res.status(500).json({ msg: error });
+    return res.status(500).json({ msg: error });
   }
 };
 
@@ -19,9 +19,11 @@ const updateUser = async (req, res) => {
     if (!updatedUser) {
       return res.status(404).json({ msg: `No user with the id: ${id}` });
     }
-    res.status(200).json({ msg: 'User updated successfully', updatedUser });
+    return res
+      .status(200)
+      .json({ msg: 'User updated successfully', updatedUser });
   } catch (error) {
-    res.status(500).json({ status: '500', msg: error });
+    return res.status(500).json({ status: '500', msg: error });
   }
 };
 
@@ -29,9 +31,11 @@ const deleteUsers = async (req, res) => {
   try {
     const deletedUsers = await User.deleteMany({ selected: true });
     if (!deletedUsers) res.status(404).json({ msg: 'No user found' });
-    res.status(200).json({ msg: 'Users deleted successfully', user: null });
+    return res
+      .status(200)
+      .json({ msg: 'Users deleted successfully', user: null });
   } catch (error) {
-    res.status(500).json({ msg: error });
+    return res.status(500).json({ msg: error });
   }
 };
 

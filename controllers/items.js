@@ -6,9 +6,9 @@ const allItems = async (req, res) => {
       .populate('createdBy', '_id name')
       .populate('inKollection', '_id')
       .sort('-createdAt');
-    res.status(200).json({ items });
+    return res.status(200).json({ items });
   } catch (error) {
-    res.status(500).json({ msg: error });
+    return res.status(500).json({ msg: error });
   }
 };
 
@@ -16,9 +16,9 @@ const allItemsByTag = async (req, res) => {
   try {
     const { tag } = req.params;
     const items = await Item.find({ tag });
-    res.status(200).json({ items });
+    return res.status(200).json({ items });
   } catch (error) {
-    res.status(500).json({ msg: error });
+    return res.status(500).json({ msg: error });
   }
 };
 
@@ -37,9 +37,9 @@ const searchItem = async (req, res) => {
         },
       },
     ]);
-    res.status(200).json({ search });
+    return res.status(200).json({ search });
   } catch (error) {
-    res.status(500).json({ msg: error });
+    return res.status(500).json({ msg: error });
   }
 };
 
@@ -67,9 +67,9 @@ const autoCompleteTag = async (req, res) => {
         },
       },
     ]);
-    res.status(200).json({ autoComplete });
+    return res.status(200).json({ autoComplete });
   } catch (error) {
-    res.status(500).json({ msg: error });
+    return res.status(500).json({ msg: error });
   }
 };
 
@@ -86,9 +86,9 @@ const createItem = async (req, res) => {
     });
     const newItem = await item.save();
 
-    res.status(200).json({ newItem });
+    return res.status(200).json({ newItem });
   } catch (error) {
-    res.status(500).json({ msg: error });
+    return res.status(500).json({ msg: error });
   }
 };
 
@@ -96,9 +96,9 @@ const kollectionItems = async (req, res) => {
   try {
     const { kollectionId } = req.body;
     const items = await Item.find({ kollectionId });
-    res.status(200).json({ items });
+    return res.status(200).json({ items });
   } catch (error) {
-    res.status(500).json({ msg: error });
+    return res.status(500).json({ msg: error });
   }
 };
 
@@ -111,10 +111,13 @@ const updateItem = async (req, res) => {
     });
     if (!updatedItem) {
       return res.status(404).json({ msg: `No Item with the id: ${id}` });
+    } else {
+      return res
+        .status(200)
+        .json({ msg: 'Item updated successfully', updatedItem });
     }
-    res.status(200).json({ msg: 'Item updated successfully', updatedItem });
   } catch (error) {
-    res.status(500).json({ status: '500', msg: error });
+    return res.status(500).json({ status: '500', msg: error });
   }
 };
 
@@ -122,9 +125,11 @@ const deleteItem = async (req, res) => {
   try {
     const deletedItem = await Item.deleteMany({ selected: true });
     if (!deletedItem) res.status(404).json({ msg: 'No Item found' });
-    res.status(200).json({ msg: 'Items deleted successfully', newItem: null });
+    return res
+      .status(200)
+      .json({ msg: 'Items deleted successfully', newItem: null });
   } catch (error) {
-    res.status(500).json({ msg: error });
+    return res.status(500).json({ msg: error });
   }
 };
 
@@ -142,7 +147,7 @@ const like = (req, res) => {
     if (err) {
       return res.status(500).json({ error: err });
     } else {
-      res.json(result);
+      return res.json(result);
     }
   });
 };
@@ -168,7 +173,7 @@ const comment = (req, res) => {
       if (err) {
         return res.status(500).json({ error: err });
       } else {
-        res.json(result);
+        return res.json(result);
       }
     });
 };

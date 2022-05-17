@@ -8,11 +8,11 @@ const signup = async (req, res) => {
     const { name, email, password, role } = req.body;
 
     if (!(name && email && password))
-      res.status(400).json({ msg: 'All input is required' });
+      return res.status(400).json({ msg: 'All input is required' });
 
     const oldUser = await User.findOne({ email });
     if (oldUser)
-      res.status(409).json({ msg: 'User already exist. Please login' });
+      return res.status(409).json({ msg: 'User already exist. Please login' });
 
     const user = await User.create({
       name,
@@ -27,9 +27,9 @@ const signup = async (req, res) => {
     });
 
     user.token = token;
-    res.status(200).json({ user });
+    return res.status(200).json({ user });
   } catch (error) {
-    res.status(500).json({ msg: error });
+    return res.status(500).json({ msg: error });
   }
 };
 
