@@ -14,10 +14,13 @@ const verifyToken = (req, res, next) => {
       const { userId } = payload;
       User.findById(userId).then(userdata => {
         req.user = userdata;
-        next();
+        return next();
       });
     });
-  } else res.status(403).json({ msg: 'You are not authorized. Please login!' });
+  } else
+    return res
+      .status(403)
+      .json({ msg: 'You are not authorized. Please login!' });
 };
 
 export default verifyToken;
