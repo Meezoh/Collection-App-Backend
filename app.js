@@ -13,7 +13,6 @@ import verifyAdmin from './middlewares/verifyAdmin.js';
 import verifyToken from './middlewares/verifyToken.js';
 import cors from 'cors';
 
-console.log('4ck offffff and piss yourself 0000000');
 // express app
 const app = express();
 dotenv.config();
@@ -23,6 +22,9 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+});
 
 // routes
 app.use('/api/login', login);
