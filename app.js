@@ -6,6 +6,7 @@ import login from './controllers/login.js';
 import signup from './controllers/signup.js';
 import users from './routes/users.js';
 import kollections from './routes/kollections.js';
+import tags from './routes/tags.js';
 import items from './routes/items.js';
 import allItems from './routes/allItems.js';
 import notFound from './middlewares/not-found.js';
@@ -30,6 +31,7 @@ app.use('/api/users', verifyToken, verifyAdmin, users);
 app.use('/api/collections', kollections);
 app.use('/api/items', verifyToken, items);
 app.use('/api/allitems', allItems);
+app.use('/api/tag', tags);
 app.use(notFound);
 
 // connect to mongodb and listen for requests

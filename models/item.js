@@ -7,9 +7,11 @@ const itemSchema = new Schema(
     name: {
       type: String,
     },
-    tag: {
-      type: Array,
-    },
+    tag: [
+      {
+        type: String,
+      },
+    ],
     likes: [
       {
         type: ObjectId,
@@ -19,7 +21,7 @@ const itemSchema = new Schema(
     comments: [
       {
         text: String,
-        postedBy: {
+        createdBy: {
           type: ObjectId,
           ref: 'User',
         },

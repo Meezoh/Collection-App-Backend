@@ -15,7 +15,7 @@ const allItems = async (req, res) => {
 const allItemsByTag = async (req, res) => {
   try {
     const { tag } = req.params;
-    const items = await Item.find({ tag });
+    const items = await Item.find({ tag: 'ikebe' });
     return res.status(200).json({ items });
   } catch (error) {
     return res.status(500).json({ msg: error });
@@ -24,13 +24,13 @@ const allItemsByTag = async (req, res) => {
 
 const searchItem = async (req, res) => {
   try {
-    const { input } = req.body;
+    const { term } = req.params;
     const search = await Item.aggregate([
       {
         $search: {
           index: 'nameIndex',
           text: {
-            query: input,
+            query: term,
             path: ['name', 'comments.text'],
             fuzzy: {},
           },
@@ -43,50 +43,35 @@ const searchItem = async (req, res) => {
   }
 };
 
-const autoCompleteTag = async (req, res) => {
+const createItem = async (req, res) => {
   try {
-    const { input } = req.body;
-    const autoComplete = await Item.aggregate([
-      {
-        $search: {
-          index: 'autoCompleteTags',
-          autocomplete: {
-            query: input,
-            path: 'tag',
-            tokenOrder: 'sequential',
-          },
-        },
-      },
-      {
-        $limit: 10,
-      },
-      {
-        $project: {
-          name: 1,
-          tag: 1,
-        },
-      },
-    ]);
-    return res.status(200).json({ autoComplete });
+    const { kollectionId } = req.params;
+    const { name } = req.body;
+    const item = new Item({
+      name,
+      createdBy: req.user,
+      inKollection: kollectionId,
+    });
+    const newItem = await item.save();
+    return res.status(200).json({ newItem });
   } catch (error) {
     return res.status(500).json({ msg: error });
   }
 };
 
-const createItem = async (req, res) => {
+const createTag = async (req, res) => {
   try {
-    const { kollectionId } = req.params;
-    const { name, tag } = req.body;
-    const item = new Item({
-      name,
-      tag,
-      // TODO: test and see if the "createdBy" can be retrieved from req.user using the frontend
-      createdBy: req.user,
-      inKollection: kollectionId,
-    });
-    const newItem = await item.save();
-
-    return res.status(200).json({ newItem });
+    const { itemId } = req.params;
+    const { tag } = req.body;
+    const updateTag = Item.findByIdAndUpdate(
+      itemId,
+      {
+        $push: { tag },
+      },
+      { new: true }
+    );
+    const newTag = await updateTag;
+    return res.status(200).json({ newTag });
   } catch (error) {
     return res.status(500).json({ msg: error });
   }
@@ -173,7 +158,7 @@ const comment = (req, res) => {
       if (err) {
         return res.status(500).json({ error: err });
       } else {
-        return res.json(result);
+        return res.status(200).json(result);
       }
     });
 };
@@ -182,8 +167,8 @@ export {
   allItems,
   searchItem,
   allItemsByTag,
-  autoCompleteTag,
   createItem,
+  createTag,
   kollectionItems,
   updateItem,
   deleteItem,
