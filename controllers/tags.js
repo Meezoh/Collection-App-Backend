@@ -15,16 +15,6 @@ const createTag = async (req, res) => {
   }
 };
 
-const searchTag = async (req, res) => {
-  try {
-    const { itemId } = req.params;
-    const tags = await Tag.find({ inItem: itemId });
-    return res.status(200).json({ tags });
-  } catch (error) {
-    return res.status(500).json({ msg: error });
-  }
-};
-
 const autoCompleteTag = async (req, res) => {
   try {
     const { term } = req.params;
@@ -56,4 +46,15 @@ const autoCompleteTag = async (req, res) => {
   }
 };
 
-export { createTag, searchTag, autoCompleteTag };
+export { createTag, autoCompleteTag };
+
+// // This is used to locate all tags that belong to a certain item
+// const searchTag = async (req, res) => {
+//   try {
+//     const { itemId } = req.params;
+//     const tags = await Tag.find({ inItem: itemId });
+//     return res.status(200).json({ tags });
+//   } catch (error) {
+//     return res.status(500).json({ msg: error });
+//   }
+// };

@@ -12,10 +12,11 @@ const allItems = async (req, res) => {
   }
 };
 
+// This is the Tag cloud.
 const allItemsByTag = async (req, res) => {
   try {
     const { tag } = req.params;
-    const items = await Item.find({ tag: 'ikebe' });
+    const items = await Item.find({ tag });
     return res.status(200).json({ items });
   } catch (error) {
     return res.status(500).json({ msg: error });
