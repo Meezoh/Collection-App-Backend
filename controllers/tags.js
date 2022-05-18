@@ -1,21 +1,15 @@
 import Tag from '../models/tag.js';
 
-const createTag = async (req, res) => {
+const latest = async (req, res) => {
   try {
-    const { itemId } = req.params;
-    const { tag } = req.body;
-    const newTag = new Tag({
-      tag,
-      inItem: itemId,
-    });
-    const theTag = await newTag.save();
-    return res.status(200).res.json({ theTag });
+    const tags = await Tag.find().sort({ _id: -1 }).limit(25);
+    return res.status(200).json({ tags });
   } catch (error) {
     return res.status(500).json({ msg: error });
   }
 };
 
-const autoCompleteTag = async (req, res) => {
+const autoComplete = async (req, res) => {
   try {
     const { term } = req.params;
     console.log(term);
@@ -46,15 +40,4 @@ const autoCompleteTag = async (req, res) => {
   }
 };
 
-export { createTag, autoCompleteTag };
-
-// // This is used to locate all tags that belong to a certain item
-// const searchTag = async (req, res) => {
-//   try {
-//     const { itemId } = req.params;
-//     const tags = await Tag.find({ inItem: itemId });
-//     return res.status(200).json({ tags });
-//   } catch (error) {
-//     return res.status(500).json({ msg: error });
-//   }
-// };
+export { latest, autoComplete };

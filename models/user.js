@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import 'mongoose-type-email';
 const Schema = mongoose.Schema;
+import bcrypt from 'bcrypt';
 
 const userSchema = new Schema(
   {
@@ -32,15 +33,31 @@ const userSchema = new Schema(
     token: {
       type: String,
     },
-    // kollections: [
-    //   {
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Kollection',
-    //   },
-    // ],
   },
   { timestamps: true }
 );
+
+userSchema.pre('save', async function (next) {
+  const salt = await bcrypt.genSalt();
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+
+userSchema.statics.login = async function (email, password) {
+  const user = await this.findOne({ email });
+
+  if (user) {
+    const auth = await bcrypt.compare(password, user.password);
+    if (auth) {
+      const updatedUser = await this.findOneAndUpdate(
+        { email },
+        { lastLoggedIn: Date.now() },
+        { new: true }
+      );
+      return updatedUser;
+    } else throw 'Incorrect password';
+  } else throw 'Incorrect email';
+};
 
 const User = mongoose.model('User', userSchema);
 export default User;

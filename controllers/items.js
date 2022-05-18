@@ -1,4 +1,5 @@
 import Item from '../models/item.js';
+import Tag from '../models/tag.js';
 
 const allItems = async (req, res) => {
   try {
@@ -47,32 +48,27 @@ const searchItem = async (req, res) => {
 const createItem = async (req, res) => {
   try {
     const { kollectionId } = req.params;
-    const { name } = req.body;
-    const item = new Item({
+    const { name, tag } = req.body;
+    const item = await Item.create({
       name,
+      tag,
       createdBy: req.user,
       inKollection: kollectionId,
     });
-    const newItem = await item.save();
-    return res.status(200).json({ newItem });
-  } catch (error) {
-    return res.status(500).json({ msg: error });
-  }
-};
 
-const createTag = async (req, res) => {
-  try {
-    const { itemId } = req.params;
-    const { tag } = req.body;
-    const updateTag = Item.findByIdAndUpdate(
-      itemId,
-      {
-        $push: { tag },
-      },
-      { new: true }
-    );
-    const newTag = await updateTag;
-    return res.status(200).json({ newTag });
+    tag.map(async t => {
+      const tagInDB = await Tag.find({ tag: t });
+      const findTag = (await tagInDB[0]) ? tagInDB[0].tag : null;
+      const alreadyExist = findTag == t;
+
+      if (!alreadyExist) {
+        Tag.create({
+          tag: t,
+        });
+      }
+    });
+
+    return res.status(200).json({ item });
   } catch (error) {
     return res.status(500).json({ msg: error });
   }
@@ -169,7 +165,6 @@ export {
   searchItem,
   allItemsByTag,
   createItem,
-  createTag,
   kollectionItems,
   updateItem,
   deleteItem,

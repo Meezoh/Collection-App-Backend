@@ -7,6 +7,7 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.login(email, password);
+    console.log(user);
 
     // create token
     const token = jwt.sign({ userId: user._id, email }, process.env.TOKEN_KEY, {

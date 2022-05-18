@@ -1,9 +1,8 @@
 import express from 'express';
-import { createTag, autoCompleteTag } from '../controllers/tags.js';
+import { latest, autoComplete } from '../controllers/tags.js';
 const router = express.Router();
 
-// router.route('/search/:itemId').get(searchTag);
-router.route('/create/:itemId').post(createTag);
-router.route('/autocomplete/:term').get(autoCompleteTag);
+router.route('/latest').get(latest);
+router.route('/autocomplete/:term').get(autoComplete);
 
 export default router;
