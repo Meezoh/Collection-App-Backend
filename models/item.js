@@ -35,7 +35,10 @@ const itemSchema = new Schema(
       type: ObjectId,
       ref: 'Kollection',
     },
-
+    selected: {
+      type: Boolean,
+      default: false,
+    },
     optional1a: {
       type: Number,
     },

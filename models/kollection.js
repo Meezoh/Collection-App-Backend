@@ -12,6 +12,10 @@ const kollectionSchema = new Schema(
       type: String,
       required: [true, 'must provide a description'],
     },
+    selected: {
+      type: Boolean,
+      default: false,
+    },
     topic: {
       type: String,
       required: [true, 'must provide a description'],

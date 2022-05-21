@@ -15,17 +15,17 @@ const allKollections = async (req, res) => {
 const createKollection = async (req, res) => {
   try {
     const { userId } = req.params;
-    const { name, description, topic } = req.body;
+    const { name, description, topic, image } = req.body;
 
-    const kollection = new Kollection({
+    const kollection = await Kollection.create({
       name,
       description,
       topic,
+      image,
       postedBy: userId,
     });
-    const newKollection = await kollection.save();
 
-    return res.status(200).json({ newKollection });
+    return res.status(200).json({ kollection });
   } catch (error) {
     return res.status(500).json({ msg: error });
   }
