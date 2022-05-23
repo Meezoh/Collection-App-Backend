@@ -76,7 +76,7 @@ const createItem = async (req, res) => {
 
 const kollectionItems = async (req, res) => {
   try {
-    const { kollectionId } = req.body;
+    const { kollectionId } = req.params;
     const items = await Item.find({ kollectionId }).sort({ _id: -1 });
     return res.status(200).json({ items });
   } catch (error) {

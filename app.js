@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/api/login', login);
 app.use('/api/signup', signup);
 app.use('/api/users', verifyToken, verifyAdmin, users);
-app.use('/api/collections', kollections);
+app.use('/api/collections', verifyToken, kollections);
 app.use('/api/items', verifyToken, items);
 app.use('/api/allitems', allItems);
 app.use('/api/tag', tags);
