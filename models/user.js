@@ -33,6 +33,10 @@ const userSchema = new Schema(
     token: {
       type: String,
     },
+    lastLoggedIn: {
+      type: Date,
+      default: Date.now,
+    },
   },
   { timestamps: true }
 );
