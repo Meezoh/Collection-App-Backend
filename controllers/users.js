@@ -27,6 +27,18 @@ const updateUser = async (req, res) => {
   }
 };
 
+const updateManyUsers = async (req, res) => {
+  try {
+    const updatedUsers = await User.updateMany({ selected: true }, req.body, {
+      now: true,
+    });
+    if (!updatedUsers) res.status(404).json({ msg: `No user found` });
+    res.status(200).json({ msg: 'User updated successfully', updatedUsers });
+  } catch (error) {
+    res.status(500).json({ status: '500', msg: error });
+  }
+};
+
 const deleteUsers = async (req, res) => {
   try {
     const deletedUsers = await User.deleteMany({ selected: true });
@@ -39,4 +51,4 @@ const deleteUsers = async (req, res) => {
   }
 };
 
-export { allUsers, updateUser, deleteUsers };
+export { allUsers, updateUser, deleteUsers, updateManyUsers };
