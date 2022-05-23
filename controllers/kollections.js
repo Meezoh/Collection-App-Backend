@@ -80,10 +80,21 @@ const deleteKollection = async (req, res) => {
   }
 };
 
+const findKollection = async (req, res) => {
+  try {
+    const { kollectionId } = req.params;
+    const kollection = await Kollection.findById({ _id: kollectionId });
+    return res.status(200).json({ kollection });
+  } catch (error) {
+    return res.status(500).json({ msg: error });
+  }
+};
+
 export {
   allKollections,
   createKollection,
   userKollections,
   updateKollection,
   deleteKollection,
+  findKollection,
 };
