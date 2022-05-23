@@ -2,7 +2,7 @@ import User from '../models/user.js';
 
 const allUsers = async (req, res) => {
   try {
-    const users = await User.find({});
+    const users = await User.find().sort({ _id: -1 });
     return res.status(200).json({ users });
   } catch (error) {
     return res.status(500).json({ msg: error });

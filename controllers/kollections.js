@@ -4,7 +4,7 @@ const allKollections = async (req, res) => {
   try {
     const kollections = await Kollection.find()
       .populate('postedBy', '_id name')
-      .sort('createdAt');
+      .sort({ _id: -1 });
 
     return res.status(200).json({ kollections });
   } catch (error) {
@@ -34,7 +34,9 @@ const createKollection = async (req, res) => {
 const userKollections = async (req, res) => {
   try {
     const { userId } = req.params;
-    const kollections = await Kollection.find({ postedBy: userId });
+    const kollections = await Kollection.find({ postedBy: userId }).sort({
+      _id: -1,
+    });
     return res.status(200).json({ kollections });
   } catch (error) {
     return res.status(500).json({ msg: error });

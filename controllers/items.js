@@ -6,7 +6,7 @@ const allItems = async (req, res) => {
     const items = await Item.find()
       .populate('createdBy', '_id name')
       .populate('inKollection', '_id')
-      .sort('-createdAt');
+      .sort({ _id: -1 });
     return res.status(200).json({ items });
   } catch (error) {
     return res.status(500).json({ msg: error });
@@ -17,7 +17,7 @@ const allItems = async (req, res) => {
 const allItemsByTag = async (req, res) => {
   try {
     const { tag } = req.params;
-    const items = await Item.find({ tag });
+    const items = await Item.find({ tag }).sort({ _id: -1 });
     return res.status(200).json({ items });
   } catch (error) {
     return res.status(500).json({ msg: error });
@@ -77,7 +77,7 @@ const createItem = async (req, res) => {
 const kollectionItems = async (req, res) => {
   try {
     const { kollectionId } = req.body;
-    const items = await Item.find({ kollectionId });
+    const items = await Item.find({ kollectionId }).sort({ _id: -1 });
     return res.status(200).json({ items });
   } catch (error) {
     return res.status(500).json({ msg: error });
