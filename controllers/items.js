@@ -1,5 +1,4 @@
 import Item from '../models/item.js';
-
 import Tag from '../models/tag.js';
 
 const allItems = async (req, res) => {
@@ -49,11 +48,10 @@ const searchItem = async (req, res) => {
 const createItem = async (req, res) => {
   try {
     const { kollectionId } = req.params;
-    const { name, tag, image } = req.body;
+    const { name, tag } = req.body;
     const item = await Item.create({
       name,
       tag,
-      image,
       createdBy: req.user,
       inKollection: kollectionId,
     });
