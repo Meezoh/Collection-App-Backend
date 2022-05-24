@@ -96,5 +96,4 @@ export {
   userKollections,
   updateKollection,
   deleteKollection,
-  findKollection,
 };

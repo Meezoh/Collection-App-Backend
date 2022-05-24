@@ -39,6 +39,10 @@ const itemSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    image: {
+      data: Buffer,
+      type: String,
+    },
     optional1a: {
       type: Number,
     },
